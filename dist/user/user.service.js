@@ -26,6 +26,21 @@ let UserService = UserService_1 = class UserService {
         });
         return findUser;
     }
+    async findUserDetailById(userId) {
+        const res = await this.prismaService.user.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                id: true,
+                email: true,
+                nickname: true,
+                headPic: true,
+                createTime: true,
+            },
+        });
+        return res;
+    }
     async register(user) {
         const captcha = await this.redisService.get(`captcha_${user.email}`);
         if (!captcha) {
@@ -93,6 +108,85 @@ let UserService = UserService_1 = class UserService {
             accessToken: 'Bearer ' + accessToken,
             refreshToken: 'Bearer ' + refreshToken,
         };
+    }
+    async updatePassword(passwordDto) {
+        const captcha = await this.redisService.get(`update_password_captcha_${passwordDto.email}`);
+        if (!captcha) {
+            throw new common_1.HttpException('验证码已失效', common_1.HttpStatus.OK);
+        }
+        if (passwordDto.captcha !== captcha) {
+            throw new common_1.HttpException('验证码不正确', common_1.HttpStatus.OK);
+        }
+        const foundUser = await this.prismaService.user.findUnique({
+            where: {
+                email: passwordDto.email,
+            },
+        });
+        foundUser.password = (0, utils_1.md5)(passwordDto.password);
+        await this.prismaService.user.update({
+            where: {
+                id: foundUser.id,
+            },
+            data: foundUser,
+        });
+        return '密码修改成功';
+    }
+    async update(userId, updateUserDto) {
+        const foundUser = await this.prismaService.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+        if (updateUserDto.headPic) {
+            foundUser.headPic = updateUserDto.headPic;
+        }
+        if (updateUserDto.nickname) {
+            foundUser.nickname = updateUserDto.nickname;
+        }
+        await this.prismaService.user.update({
+            where: {
+                id: userId,
+            },
+            data: foundUser,
+        });
+        return '用户信息修改成功';
+    }
+    async getFriendship(userId) {
+        const friends = await this.prismaService.friendship.findMany({
+            where: {
+                OR: [
+                    {
+                        userId: userId,
+                    },
+                    {
+                        friendId: userId,
+                    },
+                ],
+            },
+        });
+        const set = friends.reduce((pre, cur) => {
+            const { userId, friendId } = cur;
+            pre.add(friendId);
+            pre.add(userId);
+            return pre;
+        }, new Set());
+        const friendIds = [...set].filter((item) => item !== userId);
+        const result = [];
+        for (let i = 0; i < friendIds.length; i++) {
+            const user = await this.prismaService.user.findUnique({
+                where: {
+                    id: friendIds[i],
+                },
+                select: {
+                    id: true,
+                    nickname: true,
+                    email: true,
+                    headPic: true,
+                },
+            });
+            result.push(user);
+        }
+        return result;
     }
 };
 exports.UserService = UserService;

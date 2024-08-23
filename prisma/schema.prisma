@@ -21,4 +21,18 @@ model User {
   headPic String @db.VarChar(100) @default("")
   createTime DateTime @default(now())
   updateTime DateTime @updatedAt
+
+  friends Friendship[] @relation("userToFriend")
+  inverseFriends Friendship[] @relation("friendToUser")
+}
+
+
+model Friendship {
+  user User @relation("userToFriend", fields: [userId], references: [id])
+  userId Int
+
+  friend User @relation("friendToUser", fields: [friendId], references: [id])
+  friendId Int
+
+  @@id([userId, friendId])
 }

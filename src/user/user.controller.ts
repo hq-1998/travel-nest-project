@@ -17,6 +17,9 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { TravelExceptionFilter } from 'src/exception.filter';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserVo } from './vo/login-user.vo';
+import { RequireLogin, UserInfo } from 'src/custom.decorator';
+import { UpdatePasswordUserDto } from './dto/update-user-password.dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @ApiTags('用户管理模块')
 @Controller('user')
@@ -71,9 +74,7 @@ export class UserController {
   @Get('refresh-token')
   async refreshToken(@Query('token') token: string) {
     const data = this.jwtService.verify(token);
-    const foundUser = await this.userService.foundUser({
-      id: data.userId,
-    });
+    const foundUser = await this.userService.findUserDetailById(data.id);
     const { accessToken, refreshToken } =
       await this.userService.generateToken(foundUser);
     return {
@@ -106,5 +107,52 @@ export class UserController {
     });
 
     return '发送成功';
+  }
+  @Get('update-captcha')
+  @RequireLogin()
+  async updateCaptcha(@UserInfo('userId') userId: number) {
+    const code = Math.random().toString().slice(2, 8);
+    const { email: address } =
+      await this.userService.findUserDetailById(userId);
+
+    await this.redisService.set(
+      `update_password_captcha_${address}`,
+      code,
+      5 * 60,
+    );
+
+    await this.emailService.sendMail({
+      to: address,
+      subject: '更改用户信息验证码',
+      html: `<p>你的注册验证码是：${code}</p>`,
+    });
+
+    return '发送成功';
+  }
+
+  @Get('info')
+  @RequireLogin()
+  async info(@UserInfo('userId') userId: number) {
+    return this.userService.findUserDetailById(userId);
+  }
+
+  @Post('update')
+  @RequireLogin()
+  async update(
+    @UserInfo('userId') userId: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.update(userId, updateUserDto);
+  }
+
+  @Post('update-password')
+  async updatePassword(@Body() passwordDto: UpdatePasswordUserDto) {
+    return this.userService.updatePassword(passwordDto);
+  }
+
+  @Get('friendship')
+  @RequireLogin()
+  async friendship(@UserInfo('userId') userId: number) {
+    return this.userService.getFriendship(userId);
   }
 }

@@ -23,6 +23,9 @@ const login_user_dto_1 = require("./dto/login-user.dto");
 const exception_filter_1 = require("../exception.filter");
 const jwt_1 = require("@nestjs/jwt");
 const login_user_vo_1 = require("./vo/login-user.vo");
+const custom_decorator_1 = require("../custom.decorator");
+const update_user_password_dto_1 = require("./dto/update-user-password.dto");
+const update_user_dto_1 = require("./dto/update-user-dto");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -48,9 +51,7 @@ let UserController = class UserController {
     }
     async refreshToken(token) {
         const data = this.jwtService.verify(token);
-        const foundUser = await this.userService.foundUser({
-            id: data.userId,
-        });
+        const foundUser = await this.userService.findUserDetailById(data.id);
         const { accessToken, refreshToken } = await this.userService.generateToken(foundUser);
         return {
             accessToken,
@@ -66,6 +67,29 @@ let UserController = class UserController {
             html: `<p>你的注册验证码是：${code}</p>`,
         });
         return '发送成功';
+    }
+    async updateCaptcha(userId) {
+        const code = Math.random().toString().slice(2, 8);
+        const { email: address } = await this.userService.findUserDetailById(userId);
+        await this.redisService.set(`update_password_captcha_${address}`, code, 5 * 60);
+        await this.emailService.sendMail({
+            to: address,
+            subject: '更改用户信息验证码',
+            html: `<p>你的注册验证码是：${code}</p>`,
+        });
+        return '发送成功';
+    }
+    async info(userId) {
+        return this.userService.findUserDetailById(userId);
+    }
+    async update(userId, updateUserDto) {
+        return await this.userService.update(userId, updateUserDto);
+    }
+    async updatePassword(passwordDto) {
+        return this.userService.updatePassword(passwordDto);
+    }
+    async friendship(userId) {
+        return this.userService.getFriendship(userId);
     }
 };
 exports.UserController = UserController;
@@ -132,6 +156,46 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "captcha", null);
+__decorate([
+    (0, common_1.Get)('update-captcha'),
+    (0, custom_decorator_1.RequireLogin)(),
+    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateCaptcha", null);
+__decorate([
+    (0, common_1.Get)('info'),
+    (0, custom_decorator_1.RequireLogin)(),
+    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "info", null);
+__decorate([
+    (0, common_1.Post)('update'),
+    (0, custom_decorator_1.RequireLogin)(),
+    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)('update-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [update_user_password_dto_1.UpdatePasswordUserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updatePassword", null);
+__decorate([
+    (0, common_1.Get)('friendship'),
+    (0, custom_decorator_1.RequireLogin)(),
+    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "friendship", null);
 exports.UserController = UserController = __decorate([
     (0, swagger_1.ApiTags)('用户管理模块'),
     (0, common_1.Controller)('user'),
