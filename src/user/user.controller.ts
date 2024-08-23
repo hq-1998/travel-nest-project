@@ -14,10 +14,10 @@ import { RedisService } from 'src/redis/redis.service';
 import { EmailService } from 'src/email/email.service';
 import { ApiTags, ApiQuery, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
-import { TravelExceptionFilter } from 'src/exception.filter';
+import { TravelExceptionFilter } from 'src/filter/exception.filter';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserVo } from './vo/login-user.vo';
-import { RequireLogin, UserInfo } from 'src/custom.decorator';
+import { RequireLogin, UserInfo } from 'src/decorator/custom.decorator';
 import { UpdatePasswordUserDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user-dto';
 

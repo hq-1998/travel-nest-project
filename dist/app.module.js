@@ -17,7 +17,7 @@ const email_module_1 = require("./email/email.module");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("./prisma/prisma.service");
 const core_1 = require("@nestjs/core");
-const auth_guard_1 = require("./auth.guard");
+const auth_guard_1 = require("./guard/auth.guard");
 const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
