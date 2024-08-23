@@ -38,12 +38,7 @@ export class UserController {
   @ApiBody({ type: RegisterUserDto })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: '验证码已失效/验证码不正确/用户已存在',
-    type: String,
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '注册成功/失败',
+    description: '注册成功/失败/验证码已失效/验证码不正确/用户已存在',
     type: String,
   })
   @Post('register')

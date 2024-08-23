@@ -18,12 +18,16 @@ const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("./prisma/prisma.service");
 const core_1 = require("@nestjs/core");
 const auth_guard_1 = require("./auth.guard");
+const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
             prisma_module_1.PrismaModule,
             user_module_1.UserModule,
             redis_module_1.RedisModule,

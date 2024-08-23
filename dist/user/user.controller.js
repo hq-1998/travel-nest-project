@@ -109,12 +109,7 @@ __decorate([
     (0, swagger_1.ApiBody)({ type: register_user_dto_1.RegisterUserDto }),
     (0, swagger_1.ApiResponse)({
         status: common_1.HttpStatus.OK,
-        description: '验证码已失效/验证码不正确/用户已存在',
-        type: String,
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: common_1.HttpStatus.OK,
-        description: '注册成功/失败',
+        description: '注册成功/失败/验证码已失效/验证码不正确/用户已存在',
         type: String,
     }),
     (0, common_1.Post)('register'),
