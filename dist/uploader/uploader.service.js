@@ -6,23 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormatResponseInterceptor = void 0;
+exports.UploaderService = void 0;
 const common_1 = require("@nestjs/common");
-const rxjs_1 = require("rxjs");
-let FormatResponseInterceptor = class FormatResponseInterceptor {
-    intercept(context, next) {
-        const response = context.switchToHttp().getResponse();
-        return next.handle().pipe((0, rxjs_1.map)((data) => {
-            return {
-                code: response.statusCode,
-                message: 'success',
-                data,
-            };
-        }));
+const oss_1 = require("../utils/oss");
+let UploaderService = class UploaderService {
+    async generateSignature() {
+        return await oss_1.default.generateSignature();
     }
 };
-exports.FormatResponseInterceptor = FormatResponseInterceptor;
-exports.FormatResponseInterceptor = FormatResponseInterceptor = __decorate([
+exports.UploaderService = UploaderService;
+exports.UploaderService = UploaderService = __decorate([
     (0, common_1.Injectable)()
-], FormatResponseInterceptor);
-//# sourceMappingURL=format-response.interceptor.js.map
+], UploaderService);
+//# sourceMappingURL=uploader.service.js.map

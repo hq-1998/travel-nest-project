@@ -31,8 +31,19 @@ let UserController = class UserController {
         this.userService = userService;
     }
     async register(registerUser) {
-        const result = await this.userService.register(registerUser);
-        return result;
+        const user = await this.userService.register(registerUser);
+        const { accessToken, refreshToken } = await this.userService.generateToken(user);
+        const vo = new login_user_vo_1.LoginUserVo();
+        vo.userInfo = {
+            id: user.id,
+            nickname: user.nickname,
+            email: user.email,
+            headPic: user.headPic,
+            createTime: user.createTime,
+        };
+        vo.accessToken = accessToken;
+        vo.refreshToken = refreshToken;
+        return vo;
     }
     async login(loginUser) {
         const user = await this.userService.login(loginUser);
@@ -50,34 +61,14 @@ let UserController = class UserController {
         return vo;
     }
     async refreshToken(token) {
-        const data = this.jwtService.verify(token);
-        const foundUser = await this.userService.findUserDetailById(data.id);
+        const refresh = token.split(' ')[1];
+        const data = this.jwtService.verify(refresh);
+        const foundUser = await this.userService.findUserDetailById(data.userId);
         const { accessToken, refreshToken } = await this.userService.generateToken(foundUser);
         return {
             accessToken,
             refreshToken,
         };
-    }
-    async captcha(address) {
-        const code = Math.random().toString().slice(2, 8);
-        await this.redisService.set(`captcha_${address}`, code, 5 * 60);
-        await this.emailService.sendMail({
-            to: address,
-            subject: '注册验证码',
-            html: `<p>你的注册验证码是：${code}</p>`,
-        });
-        return '发送成功';
-    }
-    async updateCaptcha(userId) {
-        const code = Math.random().toString().slice(2, 8);
-        const { email: address } = await this.userService.findUserDetailById(userId);
-        await this.redisService.set(`update_password_captcha_${address}`, code, 5 * 60);
-        await this.emailService.sendMail({
-            to: address,
-            subject: '更改用户信息验证码',
-            html: `<p>你的注册验证码是：${code}</p>`,
-        });
-        return '发送成功';
     }
     async info(userId) {
         return this.userService.findUserDetailById(userId);
@@ -132,33 +123,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "refreshToken", null);
-__decorate([
-    (0, swagger_1.ApiQuery)({
-        name: 'address',
-        type: String,
-        description: '邮箱地址',
-        required: true,
-        example: 'xxx@xx.com',
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: common_1.HttpStatus.OK,
-        description: '发送成功',
-        type: String,
-    }),
-    (0, common_1.Get)('register-captcha'),
-    __param(0, (0, common_1.Query)('address')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "captcha", null);
-__decorate([
-    (0, common_1.Get)('update-captcha'),
-    (0, custom_decorator_1.RequireLogin)(),
-    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "updateCaptcha", null);
 __decorate([
     (0, common_1.Get)('info'),
     (0, custom_decorator_1.RequireLogin)(),

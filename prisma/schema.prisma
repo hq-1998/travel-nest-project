@@ -16,16 +16,18 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @db.VarChar(50) @unique
-  password String @db.VarChar(50)
-  nickname String @db.VarChar(50)
+  address String @db.VarChar(100) @default("")
+  password String @db.VarChar(50) 
+  py String @db.VarChar(200) @default("")
+  nickname String @db.VarChar(50) @default("")
   headPic String @db.VarChar(100) @default("")
   createTime DateTime @default(now())
   updateTime DateTime @updatedAt
 
   friends Friendship[] @relation("userToFriend")
   inverseFriends Friendship[] @relation("friendToUser")
+  articles Article[]
 }
-
 
 model Friendship {
   user User @relation("userToFriend", fields: [userId], references: [id])
@@ -35,4 +37,38 @@ model Friendship {
   friendId Int
 
   @@id([userId, friendId])
+}
+
+model Article {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(50)
+  content String @db.VarChar(200)
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  urls ArticleUrl[]
+  comments Comment[]
+  commentCount Int @default(0)
+  likeCount Int @default(0)
+  favoriteCount Int @default(0)
+  address String? @db.VarChar(100)
+} 
+
+model ArticleUrl {
+  url String
+  articleId Int 
+  artile Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([url, articleId])
+  @@index([articleId])
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  content String @db.VarChar(200)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  articleId Int
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 }

@@ -11,6 +11,7 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true }));
     app.useGlobalInterceptors(new format_response_interceptor_1.FormatResponseInterceptor());
     app.useGlobalFilters(new exception_filter_1.TravelExceptionFilter());
+    app.enableCors();
     const config = new swagger_1.DocumentBuilder()
         .setTitle('Travel')
         .setDescription('api 接口文档')

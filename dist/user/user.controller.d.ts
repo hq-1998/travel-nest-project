@@ -13,23 +13,16 @@ export declare class UserController {
     emailService: EmailService;
     jwtService: JwtService;
     constructor(userService: UserService);
-    register(registerUser: RegisterUserDto): Promise<{
-        id: number;
-        email: string;
-        nickname: string;
-        headPic: string;
-        createTime: Date;
-    }>;
+    register(registerUser: RegisterUserDto): Promise<LoginUserVo>;
     login(loginUser: LoginUserDto): Promise<LoginUserVo>;
     refreshToken(token: string): Promise<{
         accessToken: string;
         refreshToken: string;
     }>;
-    captcha(address: string): Promise<string>;
-    updateCaptcha(userId: number): Promise<string>;
     info(userId: number): Promise<{
-        id: number;
         email: string;
+        id: number;
+        address: string;
         nickname: string;
         headPic: string;
         createTime: Date;

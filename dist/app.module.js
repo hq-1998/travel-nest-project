@@ -19,6 +19,8 @@ const prisma_service_1 = require("./prisma/prisma.service");
 const core_1 = require("@nestjs/core");
 const auth_guard_1 = require("./guard/auth.guard");
 const config_1 = require("@nestjs/config");
+const uploader_module_1 = require("./uploader/uploader.module");
+const article_module_1 = require("./article/article.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +45,8 @@ exports.AppModule = AppModule = __decorate([
                     };
                 },
             }),
+            uploader_module_1.UploaderModule,
+            article_module_1.ArticleModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

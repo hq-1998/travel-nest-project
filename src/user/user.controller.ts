@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { RedisService } from 'src/redis/redis.service';
 import { EmailService } from 'src/email/email.service';
-import { ApiTags, ApiQuery, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
 import { TravelExceptionFilter } from 'src/filter/exception.filter';
 import { JwtService } from '@nestjs/jwt';
@@ -43,8 +43,21 @@ export class UserController {
   })
   @Post('register')
   async register(@Body() registerUser: RegisterUserDto) {
-    const result = await this.userService.register(registerUser);
-    return result;
+    const user = await this.userService.register(registerUser);
+    const { accessToken, refreshToken } =
+      await this.userService.generateToken(user);
+
+    const vo = new LoginUserVo();
+    vo.userInfo = {
+      id: user.id,
+      nickname: user.nickname,
+      email: user.email,
+      headPic: user.headPic,
+      createTime: user.createTime,
+    };
+    vo.accessToken = accessToken;
+    vo.refreshToken = refreshToken;
+    return vo;
   }
 
   @Post('login')
@@ -68,61 +81,15 @@ export class UserController {
 
   @Get('refresh-token')
   async refreshToken(@Query('token') token: string) {
-    const data = this.jwtService.verify(token);
-    const foundUser = await this.userService.findUserDetailById(data.id);
+    const refresh = token.split(' ')[1];
+    const data = this.jwtService.verify(refresh);
+    const foundUser = await this.userService.findUserDetailById(data.userId);
     const { accessToken, refreshToken } =
       await this.userService.generateToken(foundUser);
     return {
       accessToken,
       refreshToken,
     };
-  }
-
-  @ApiQuery({
-    name: 'address',
-    type: String,
-    description: '邮箱地址',
-    required: true,
-    example: 'xxx@xx.com',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '发送成功',
-    type: String,
-  })
-  @Get('register-captcha')
-  async captcha(@Query('address') address: string) {
-    const code = Math.random().toString().slice(2, 8);
-    await this.redisService.set(`captcha_${address}`, code, 5 * 60);
-
-    await this.emailService.sendMail({
-      to: address,
-      subject: '注册验证码',
-      html: `<p>你的注册验证码是：${code}</p>`,
-    });
-
-    return '发送成功';
-  }
-  @Get('update-captcha')
-  @RequireLogin()
-  async updateCaptcha(@UserInfo('userId') userId: number) {
-    const code = Math.random().toString().slice(2, 8);
-    const { email: address } =
-      await this.userService.findUserDetailById(userId);
-
-    await this.redisService.set(
-      `update_password_captcha_${address}`,
-      code,
-      5 * 60,
-    );
-
-    await this.emailService.sendMail({
-      to: address,
-      subject: '更改用户信息验证码',
-      html: `<p>你的注册验证码是：${code}</p>`,
-    });
-
-    return '发送成功';
   }
 
   @Get('info')

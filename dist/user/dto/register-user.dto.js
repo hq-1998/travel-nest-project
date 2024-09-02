@@ -16,12 +16,6 @@ class RegisterUserDto {
 exports.RegisterUserDto = RegisterUserDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)({
-        message: '昵称不能为空',
-    }),
-    __metadata("design:type", String)
-], RegisterUserDto.prototype, "nickname", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)({
         message: '密码不能为空',
     }),
     (0, class_validator_1.MinLength)(6, {

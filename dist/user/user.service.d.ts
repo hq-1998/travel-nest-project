@@ -10,22 +10,25 @@ export declare class UserService {
     foundUser(condition: any): Promise<{
         id: number;
         email: string;
+        address: string;
         password: string;
+        py: string;
         nickname: string;
         headPic: string;
         createTime: Date;
         updateTime: Date;
     }>;
     findUserDetailById(userId: number): Promise<{
-        id: number;
         email: string;
+        id: number;
+        address: string;
         nickname: string;
         headPic: string;
         createTime: Date;
     }>;
     register(user: RegisterUserDto): Promise<{
-        id: number;
         email: string;
+        id: number;
         nickname: string;
         headPic: string;
         createTime: Date;
@@ -33,7 +36,9 @@ export declare class UserService {
     login(user: LoginUserDto): Promise<{
         id: number;
         email: string;
+        address: string;
         password: string;
+        py: string;
         nickname: string;
         headPic: string;
         createTime: Date;

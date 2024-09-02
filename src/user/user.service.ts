@@ -45,6 +45,7 @@ export class UserService {
         nickname: true,
         headPic: true,
         createTime: true,
+        address: true,
       },
     });
     return res;
@@ -73,7 +74,6 @@ export class UserService {
       return await this.prismaService.user.create({
         data: {
           password: md5(user.password),
-          nickname: user.nickname,
           email: user.email,
         },
         select: {
@@ -178,6 +178,10 @@ export class UserService {
 
     if (updateUserDto.nickname) {
       foundUser.nickname = updateUserDto.nickname;
+    }
+
+    if (updateUserDto.address) {
+      foundUser.address = updateUserDto.address;
     }
 
     await this.prismaService.user.update({

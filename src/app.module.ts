@@ -10,6 +10,8 @@ import { PrismaService } from './prisma/prisma.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guard/auth.guard';
 import { ConfigModule } from '@nestjs/config';
+import { UploaderModule } from './uploader/uploader.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { ConfigModule } from '@nestjs/config';
         };
       },
     }),
+    UploaderModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [

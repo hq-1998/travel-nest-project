@@ -10,6 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new FormatResponseInterceptor());
   app.useGlobalFilters(new TravelExceptionFilter());
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('Travel')
     .setDescription('api 接口文档')

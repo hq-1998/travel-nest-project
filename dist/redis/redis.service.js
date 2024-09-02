@@ -21,6 +21,17 @@ let RedisService = class RedisService {
             await this.redisClient.expire(key, ttl);
         }
     }
+    async hashGet(key) {
+        return await this.redisClient.hGetAll(key);
+    }
+    async hashSet(key, obj, ttl) {
+        for (const name in obj) {
+            await this.redisClient.hSet(key, name, obj[name]);
+        }
+        if (ttl) {
+            await this.redisClient.expire(key, ttl);
+        }
+    }
 };
 exports.RedisService = RedisService;
 __decorate([
