@@ -79,9 +79,6 @@ let UserController = class UserController {
     async updatePassword(passwordDto) {
         return this.userService.updatePassword(passwordDto);
     }
-    async friendship(userId) {
-        return this.userService.getFriendship(userId);
-    }
 };
 exports.UserController = UserController;
 __decorate([
@@ -147,14 +144,6 @@ __decorate([
     __metadata("design:paramtypes", [update_user_password_dto_1.UpdatePasswordUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updatePassword", null);
-__decorate([
-    (0, common_1.Get)('friendship'),
-    (0, custom_decorator_1.RequireLogin)(),
-    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "friendship", null);
 exports.UserController = UserController = __decorate([
     (0, swagger_1.ApiTags)('用户管理模块'),
     (0, common_1.Controller)('user'),

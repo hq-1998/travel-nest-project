@@ -21,6 +21,7 @@ const auth_guard_1 = require("./guard/auth.guard");
 const config_1 = require("@nestjs/config");
 const uploader_module_1 = require("./uploader/uploader.module");
 const article_module_1 = require("./article/article.module");
+const friendship_module_1 = require("./friendship/friendship.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -47,6 +48,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             uploader_module_1.UploaderModule,
             article_module_1.ArticleModule,
+            friendship_module_1.FriendshipModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

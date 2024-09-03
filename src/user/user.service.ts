@@ -193,46 +193,4 @@ export class UserService {
 
     return '用户信息修改成功';
   }
-
-  async getFriendship(userId: number) {
-    const friends = await this.prismaService.friendship.findMany({
-      where: {
-        OR: [
-          {
-            userId: userId,
-          },
-          {
-            friendId: userId,
-          },
-        ],
-      },
-    });
-
-    const set = friends.reduce((pre, cur) => {
-      const { userId, friendId } = cur;
-      pre.add(friendId);
-      pre.add(userId);
-      return pre;
-    }, new Set<number>());
-
-    const friendIds = [...set].filter((item) => item !== userId);
-
-    const result = [];
-
-    for (let i = 0; i < friendIds.length; i++) {
-      const user = await this.prismaService.user.findUnique({
-        where: {
-          id: friendIds[i],
-        },
-        select: {
-          id: true,
-          nickname: true,
-          email: true,
-          headPic: true,
-        },
-      });
-      result.push(user);
-    }
-    return result;
-  }
 }

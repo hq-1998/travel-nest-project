@@ -12,6 +12,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { ConfigModule } from '@nestjs/config';
 import { UploaderModule } from './uploader/uploader.module';
 import { ArticleModule } from './article/article.module';
+import { FriendshipModule } from './friendship/friendship.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ArticleModule } from './article/article.module';
     }),
     UploaderModule,
     ArticleModule,
+    FriendshipModule,
   ],
   controllers: [AppController],
   providers: [

@@ -20,8 +20,8 @@ export declare class UserController {
         refreshToken: string;
     }>;
     info(userId: number): Promise<{
-        email: string;
         id: number;
+        email: string;
         address: string;
         nickname: string;
         headPic: string;
@@ -29,5 +29,4 @@ export declare class UserController {
     }>;
     update(userId: number, updateUserDto: UpdateUserDto): Promise<string>;
     updatePassword(passwordDto: UpdatePasswordUserDto): Promise<string>;
-    friendship(userId: number): Promise<any[]>;
 }

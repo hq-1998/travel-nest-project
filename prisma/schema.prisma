@@ -22,11 +22,11 @@ model User {
   nickname String @db.VarChar(50) @default("")
   headPic String @db.VarChar(100) @default("")
   createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
+  updateTime DateTime @updatedAt @default(now())
+  articles Article[]
 
   friends Friendship[] @relation("userToFriend")
   inverseFriends Friendship[] @relation("friendToUser")
-  articles Article[]
 }
 
 model Friendship {
@@ -39,12 +39,26 @@ model Friendship {
   @@id([userId, friendId])
 }
 
+model FriendRequest {
+  id Int @id @default(autoincrement())
+  // 请求发送方
+  fromUserId Int
+  // 待添加好友
+  toUserId Int
+  // 添加理由
+  reason String @db.VarChar(200)
+  // 状态 0 请求中 1 已同意 2 已拒绝
+  status Int
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
+}
+
 model Article {
   id Int @id @default(autoincrement())
   title String @db.VarChar(50)
   content String @db.VarChar(200)
   createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
+  updateTime DateTime @updatedAt @default(now())
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   urls ArticleUrl[]
