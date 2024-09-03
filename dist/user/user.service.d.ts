@@ -6,6 +6,7 @@ export declare class UserService {
     private prismaService;
     private jwtService;
     private redisService;
+    private configService;
     private logger;
     foundUser(condition: any): Promise<{
         id: number;
@@ -19,16 +20,16 @@ export declare class UserService {
         updateTime: Date;
     }>;
     findUserDetailById(userId: number): Promise<{
-        id: number;
         email: string;
+        id: number;
         address: string;
         nickname: string;
         headPic: string;
         createTime: Date;
     }>;
     register(user: RegisterUserDto): Promise<{
-        id: number;
         email: string;
+        id: number;
         nickname: string;
         headPic: string;
         createTime: Date;

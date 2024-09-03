@@ -20,8 +20,8 @@ export declare class UserController {
         refreshToken: string;
     }>;
     info(userId: number): Promise<{
-        id: number;
         email: string;
+        id: number;
         address: string;
         nickname: string;
         headPic: string;

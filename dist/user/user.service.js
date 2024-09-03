@@ -16,6 +16,7 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const redis_service_1 = require("../redis/redis.service");
 const utils_1 = require("../utils");
 const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 let UserService = UserService_1 = class UserService {
     constructor() {
         this.logger = new common_1.Logger();
@@ -97,12 +98,12 @@ let UserService = UserService_1 = class UserService {
             userId: user.id,
             email: user.email,
         }, {
-            expiresIn: '30m',
+            expiresIn: this.configService.get('jwt_access_token_expires_time'),
         });
         const refreshToken = this.jwtService.sign({
             userId: user.id,
         }, {
-            expiresIn: '7d',
+            expiresIn: this.configService.get('jwt_refresh_token_expires_time'),
         });
         return {
             accessToken: 'Bearer ' + accessToken,
@@ -168,6 +169,10 @@ __decorate([
     (0, common_1.Inject)(redis_service_1.RedisService),
     __metadata("design:type", redis_service_1.RedisService)
 ], UserService.prototype, "redisService", void 0);
+__decorate([
+    (0, common_1.Inject)(config_1.ConfigService),
+    __metadata("design:type", config_1.ConfigService)
+], UserService.prototype, "configService", void 0);
 exports.UserService = UserService = UserService_1 = __decorate([
     (0, common_1.Injectable)()
 ], UserService);

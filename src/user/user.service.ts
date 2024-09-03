@@ -13,6 +13,7 @@ import { md5 } from 'src/utils';
 import { JwtService } from '@nestjs/jwt';
 import { UpdatePasswordUserDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user-dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -24,6 +25,9 @@ export class UserService {
 
   @Inject(RedisService)
   private redisService: RedisService;
+
+  @Inject(ConfigService)
+  private configService: ConfigService;
 
   private logger = new Logger();
 
@@ -118,7 +122,7 @@ export class UserService {
         email: user.email,
       },
       {
-        expiresIn: '30m',
+        expiresIn: this.configService.get('jwt_access_token_expires_time'),
       },
     );
     const refreshToken = this.jwtService.sign(
@@ -126,7 +130,7 @@ export class UserService {
         userId: user.id,
       },
       {
-        expiresIn: '7d',
+        expiresIn: this.configService.get('jwt_refresh_token_expires_time'),
       },
     );
     return {

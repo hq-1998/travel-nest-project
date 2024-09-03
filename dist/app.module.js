@@ -22,6 +22,7 @@ const config_1 = require("@nestjs/config");
 const uploader_module_1 = require("./uploader/uploader.module");
 const article_module_1 = require("./article/article.module");
 const friendship_module_1 = require("./friendship/friendship.module");
+const path = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,6 +31,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                envFilePath: path.join(__dirname, '.env'),
             }),
             prisma_module_1.PrismaModule,
             user_module_1.UserModule,
@@ -37,14 +39,15 @@ exports.AppModule = AppModule = __decorate([
             email_module_1.EmailModule,
             jwt_1.JwtModule.registerAsync({
                 global: true,
-                useFactory() {
+                useFactory(configService) {
                     return {
-                        secret: 'hq',
+                        secret: configService.get('jwt_secret'),
                         signOptions: {
-                            expiresIn: '30m',
+                            expiresIn: configService.get('jwt_access_token_expires_time'),
                         },
                     };
                 },
+                inject: [config_1.ConfigService],
             }),
             uploader_module_1.UploaderModule,
             article_module_1.ArticleModule,

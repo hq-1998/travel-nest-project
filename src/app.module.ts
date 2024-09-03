@@ -9,15 +9,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guard/auth.guard';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UploaderModule } from './uploader/uploader.module';
 import { ArticleModule } from './article/article.module';
 import { FriendshipModule } from './friendship/friendship.module';
+import * as path from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      // envFilePath: 'src/.env',
+      envFilePath: path.join(__dirname, '.env'),
     }),
     PrismaModule,
     UserModule,
@@ -25,14 +28,15 @@ import { FriendshipModule } from './friendship/friendship.module';
     EmailModule,
     JwtModule.registerAsync({
       global: true,
-      useFactory() {
+      useFactory(configService: ConfigService) {
         return {
-          secret: 'hq',
+          secret: configService.get('jwt_secret'),
           signOptions: {
-            expiresIn: '30m',
+            expiresIn: configService.get('jwt_access_token_expires_time'),
           },
         };
       },
+      inject: [ConfigService],
     }),
     UploaderModule,
     ArticleModule,
