@@ -5,12 +5,7 @@ class AliOss {
   config;
 
   constructor() {
-    this.config = {
-      region: process.env.OSS_REGION,
-      bucket: process.env.OSS_BUCKET,
-      accessKeyId: process.env.OSS_ACCESSKEY_ID,
-      accessKeySecret: process.env.OSS_ACCESSKEY_SECRET,
-    };
+    this.config = {};
     this.client = new OSS(this.config);
   }
   async generateSignature() {
