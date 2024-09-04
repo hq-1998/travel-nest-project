@@ -16,7 +16,7 @@ services:
   mysql-container:
     image: mysql
     volumes:
-      - /Users/qianghuang/mysql-data:/var/lib/mysql
+      - /Users/huangqiang/mysql-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=travel
@@ -29,7 +29,7 @@ services:
   redis-container:
     image: redis
     volumes:
-      - /Users/qianghuang/redis-data:/data
+      - /Users/huangqiang/redis-data:/data
     networks:
       - common-network
 networks:
