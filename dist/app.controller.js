@@ -17,12 +17,21 @@ let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
+    getHello() {
+        return 'Hello World!';
+    }
 };
 exports.AppController = AppController;
 __decorate([
     (0, common_1.Inject)(config_1.ConfigService),
     __metadata("design:type", config_1.ConfigService)
 ], AppController.prototype, "configService", void 0);
+__decorate([
+    (0, common_1.Get)('test'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", String)
+], AppController.prototype, "getHello", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
