@@ -9,5 +9,4 @@ declare class AliOss {
         policy: any;
     }>;
 }
-declare const _default: AliOss;
-export default _default;
+export default AliOss;

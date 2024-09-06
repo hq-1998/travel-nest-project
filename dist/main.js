@@ -7,6 +7,12 @@ const swagger_1 = require("@nestjs/swagger");
 const exception_filter_1 = require("./filter/exception.filter");
 const format_response_interceptor_1 = require("./interceptor/format-response.interceptor");
 const config_1 = require("@nestjs/config");
+const dotenv = require("dotenv");
+dotenv.config({
+    path: process.env.NODE_ENV === 'development'
+        ? '.env.development'
+        : '.env.production',
+});
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);

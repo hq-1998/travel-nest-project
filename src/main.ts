@@ -5,6 +5,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { TravelExceptionFilter } from './filter/exception.filter';
 import { FormatResponseInterceptor } from './interceptor/format-response.interceptor';
 import { ConfigService } from '@nestjs/config';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path:
+    process.env.NODE_ENV === 'development'
+      ? '.env.development'
+      : '.env.production',
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

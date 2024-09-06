@@ -28,5 +28,5 @@ class AliOss {
         };
     }
 }
-exports.default = new AliOss();
+exports.default = AliOss;
 //# sourceMappingURL=oss.js.map

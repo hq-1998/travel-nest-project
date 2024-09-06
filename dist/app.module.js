@@ -22,7 +22,12 @@ const config_1 = require("@nestjs/config");
 const uploader_module_1 = require("./uploader/uploader.module");
 const article_module_1 = require("./article/article.module");
 const friendship_module_1 = require("./friendship/friendship.module");
-const path = require("path");
+const configFactory = () => ({
+    isGlobal: true,
+    envFilePath: process.env.NODE_ENV === 'development'
+        ? '.env.development'
+        : '.env.production',
+});
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -31,7 +36,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: path.join(__dirname, '.env'),
+                load: [configFactory],
             }),
             prisma_module_1.PrismaModule,
             user_module_1.UserModule,

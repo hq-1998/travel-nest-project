@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import aliOss from 'src/utils/oss';
+import AliOss from 'src/utils/oss';
 
 @Injectable()
 export class UploaderService {
   async generateSignature() {
+    const aliOss = new AliOss();
     return await aliOss.generateSignature();
   }
 }

@@ -33,4 +33,4 @@ class AliOss {
   }
 }
 
-export default new AliOss();
+export default AliOss;

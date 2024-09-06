@@ -13,14 +13,20 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UploaderModule } from './uploader/uploader.module';
 import { ArticleModule } from './article/article.module';
 import { FriendshipModule } from './friendship/friendship.module';
-import * as path from 'path';
+
+const configFactory = () => ({
+  isGlobal: true,
+  envFilePath:
+    process.env.NODE_ENV === 'development'
+      ? '.env.development'
+      : '.env.production',
+});
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: 'src/.env',
-      envFilePath: path.join(__dirname, '.env'),
+      load: [configFactory], // 使用异步配置工厂
     }),
     PrismaModule,
     UserModule,

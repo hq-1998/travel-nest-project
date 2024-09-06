@@ -11,7 +11,8 @@ const common_1 = require("@nestjs/common");
 const oss_1 = require("../utils/oss");
 let UploaderService = class UploaderService {
     async generateSignature() {
-        return await oss_1.default.generateSignature();
+        const aliOss = new oss_1.default();
+        return await aliOss.generateSignature();
     }
 };
 exports.UploaderService = UploaderService;
