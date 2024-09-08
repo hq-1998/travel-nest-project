@@ -94,8 +94,8 @@ export class UserController {
 
   @Get('info')
   @RequireLogin()
-  async info(@UserInfo('userId') userId: number) {
-    return this.userService.findUserDetailById(userId);
+  async info(@UserInfo('userId') userId: number, @Query('id') id: number) {
+    return this.userService.findUserDetailById(id ?? userId);
   }
 
   @Post('update')

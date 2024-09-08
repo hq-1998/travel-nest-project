@@ -27,6 +27,9 @@ let FriendshipController = class FriendshipController {
     async list(userId) {
         return this.friendshipService.list(userId);
     }
+    async requestNum(userId) {
+        return this.friendshipService.requestNum(userId);
+    }
     async agree(friendId, userId) {
         if (!friendId) {
             throw new common_1.BadRequestException('添加的好友id不能为空');
@@ -67,6 +70,14 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "list", null);
+__decorate([
+    (0, common_1.Get)('request-num'),
+    (0, custom_decorator_1.RequireLogin)(),
+    __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], FriendshipController.prototype, "requestNum", null);
 __decorate([
     (0, common_1.Get)('agree/:id'),
     (0, custom_decorator_1.RequireLogin)(),

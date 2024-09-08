@@ -36,9 +36,26 @@ let FriendshipService = class FriendshipService {
         return '请求发送成功';
     }
     async list(userId) {
-        return await this.prismaService.friendRequest.findMany({
+        const res = await this.prismaService.friendRequest.findMany({
             where: {
-                fromUserId: userId,
+                toUserId: userId,
+            },
+            include: {
+                fromUser: {
+                    select: {
+                        id: true,
+                        nickname: true,
+                        headPic: true,
+                    },
+                },
+            },
+        });
+        return res;
+    }
+    async requestNum(userId) {
+        return await this.prismaService.friendRequest.count({
+            where: {
+                toUserId: userId,
             },
         });
     }

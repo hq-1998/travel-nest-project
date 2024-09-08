@@ -27,6 +27,24 @@ model User {
 
   friends Friendship[] @relation("userToFriend")
   inverseFriends Friendship[] @relation("friendToUser")
+
+  FriendRequest FriendRequest[] @relation(name: "FromUser")
+}
+
+model Chatroom {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  // 聊天室类型 true 群聊 false 单聊
+  type Boolean @default(false)
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
+}
+
+model UserChatroom {
+  userId Int
+  chatroomId Int
+
+  @@id([userId, chatroomId])
 }
 
 model Friendship {
@@ -51,6 +69,8 @@ model FriendRequest {
   status Int
   createTime DateTime @default(now())
   updateTime DateTime @updatedAt
+
+  fromUser User @relation(name: "FromUser", fields: [fromUserId], references: [id])
 }
 
 model Article {

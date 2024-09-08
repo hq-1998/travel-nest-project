@@ -13,7 +13,7 @@ services:
     networks:
       - common-network
     env_file:
-      - .env
+      - .env.${ENV}
 
   mysql-container:
     image: mysql

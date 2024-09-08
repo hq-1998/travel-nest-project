@@ -18,7 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:generate": "npx prisma generate"
+    "prisma:generate": "npx prisma generate",
+    "migrate:mysql:dev": "dotenv -e .env.development -- npx prisma migrate dev --name mysql-init",
+    "migrate:mysql:prod": "dotenv -e .env.production -- npx prisma migrate dev --name mysql-init",
+    "compose:dev": "ENV=development docker-compose up",
+    "compose:prod": "ENV=production docker-compose up"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
@@ -35,6 +39,8 @@
     "ali-oss": "^6.21.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
     "nodemailer": "^6.9.14",
     "pinyin": "4.0.0-alpha.2",
     "redis": "^4.7.0",

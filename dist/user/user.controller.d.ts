@@ -19,9 +19,9 @@ export declare class UserController {
         accessToken: string;
         refreshToken: string;
     }>;
-    info(userId: number): Promise<{
-        email: string;
+    info(userId: number, id: number): Promise<{
         id: number;
+        email: string;
         address: string;
         nickname: string;
         headPic: string;

@@ -26,6 +26,12 @@ export class FriendshipController {
     return this.friendshipService.list(userId);
   }
 
+  @Get('request-num')
+  @RequireLogin()
+  async requestNum(@UserInfo('userId') userId: number) {
+    return this.friendshipService.requestNum(userId);
+  }
+
   @Get('agree/:id')
   @RequireLogin()
   async agree(@Param('id') friendId: number, @UserInfo('userId') userId) {

@@ -70,8 +70,8 @@ let UserController = class UserController {
             refreshToken,
         };
     }
-    async info(userId) {
-        return this.userService.findUserDetailById(userId);
+    async info(userId, id) {
+        return this.userService.findUserDetailById(id ?? userId);
     }
     async update(userId, updateUserDto) {
         return await this.userService.update(userId, updateUserDto);
@@ -124,8 +124,9 @@ __decorate([
     (0, common_1.Get)('info'),
     (0, custom_decorator_1.RequireLogin)(),
     __param(0, (0, custom_decorator_1.UserInfo)('userId')),
+    __param(1, (0, common_1.Query)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "info", null);
 __decorate([

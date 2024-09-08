@@ -69,7 +69,11 @@ RUN pnpm install --prod
 RUN rm .npmrc
 
 # 生成 Prisma 客户端
-RUN npx prisma generate
+RUN if [ "$NODE_ENV" = "development" ]; then \
+    pnpm run migrate:mysql:dev; \
+    else \
+    pnpm run migrate:mysql:prod; \
+    fi
 
 # 暴露端口
 EXPOSE 3005
