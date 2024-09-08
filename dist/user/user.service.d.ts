@@ -20,16 +20,16 @@ export declare class UserService {
         updateTime: Date;
     }>;
     findUserDetailById(userId: number): Promise<{
-        id: number;
         email: string;
+        id: number;
         address: string;
         nickname: string;
         headPic: string;
         createTime: Date;
     }>;
     register(user: RegisterUserDto): Promise<{
-        id: number;
         email: string;
+        id: number;
         nickname: string;
         headPic: string;
         createTime: Date;

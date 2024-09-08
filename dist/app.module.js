@@ -22,6 +22,7 @@ const config_1 = require("@nestjs/config");
 const uploader_module_1 = require("./uploader/uploader.module");
 const article_module_1 = require("./article/article.module");
 const friendship_module_1 = require("./friendship/friendship.module");
+const chatroom_module_1 = require("./chatroom/chatroom.module");
 const configFactory = () => ({
     isGlobal: true,
     envFilePath: process.env.NODE_ENV === 'development'
@@ -57,6 +58,7 @@ exports.AppModule = AppModule = __decorate([
             uploader_module_1.UploaderModule,
             article_module_1.ArticleModule,
             friendship_module_1.FriendshipModule,
+            chatroom_module_1.ChatroomModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

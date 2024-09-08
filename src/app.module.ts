@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UploaderModule } from './uploader/uploader.module';
 import { ArticleModule } from './article/article.module';
 import { FriendshipModule } from './friendship/friendship.module';
+import { ChatroomModule } from './chatroom/chatroom.module';
 
 const configFactory = () => ({
   isGlobal: true,
@@ -47,6 +48,7 @@ const configFactory = () => ({
     UploaderModule,
     ArticleModule,
     FriendshipModule,
+    ChatroomModule,
   ],
   controllers: [AppController],
   providers: [
